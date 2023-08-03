@@ -12,7 +12,7 @@
         border-radius: 10px;
     }
     canvas{
-        width:1000px !important;
+         /* !important; */
         height:600px !important;
     }
 </style>
