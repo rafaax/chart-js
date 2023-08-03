@@ -59,49 +59,77 @@ $count2 = array(
 );
 
 ?>
+<!DOCTYPE html>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div>
-  <canvas id="myChart"></canvas>
+  <canvas id="myChart" style="width:900px; height: 300px;"></canvas>
 </div>
 
 <script>
 
   const ctx = document.getElementById('myChart');
 
-  var data = [
-    <?php echo $count['presencial'].','.$count['remoto'].','.$count['compromisso_pessoal']?>
-  ];
+    var data = [
+        <?php echo $count['presencial'].','.$count['remoto'].','.$count['compromisso_pessoal']?>
+    ];
 
-  var data2 = [
-    <?php echo $count2['presencial'].','.$count2['remoto'].','.$count2['compromisso_pessoal']?>
-  ];
+    var data2 = [
+        <?php echo $count2['presencial'].','.$count2['remoto'].','.$count2['compromisso_pessoal']?>
+    ];
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Presencial', 'Remoto', 'Compromisso Pessoal'],
-      datasets: [{
-        label: 'Menor que meio dia',
-        data: data,
-      },
-      {
-        label: 'Maior que meio dia',
-        data: data2,
-      }
-      ]
-    },
-    options: {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Reuniões Engeline'
-      }
-    }
-  }
-  });
+    let delayed;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Presencial', 'Remoto', 'Compromisso Pessoal'],
+            datasets: [{
+                label: 'Menor que meio dia',
+                data: data,
+                backgroundColor: [
+                    'rgb(255, 255, 255)'
+                ],
+                 borderColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                borderWidth: 3
+            },
+            {
+                label: 'Maior que meio dia',
+                data: data2,
+                backgroundColor: [
+                    'rgb(202, 202, 202)'
+                ],
+                 borderColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                borderWidth: 3
+            }
+            ]
+        },
+        options: {
+            animation: {
+                onComplete: () => {
+                    delayed = true;
+                },
+                delay: (context) => {
+                    let delay = 0;
+                    if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                    delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                    }
+                    return delay;
+                },
+            },
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Reuniões Engeline'
+                }
+            }   
+        }
+    });
 </script>
  
