@@ -1,4 +1,3 @@
-let url = 'fetch.php'
 let presencial;
 let isFetching = false;
 var myChart;
@@ -79,10 +78,75 @@ function geraGrafico(data, data2, func){
             }
         });
     }
-
 }
 
-async function getPhp(){
+
+
+function geraGrafico2(data, func){
+    const ctx = document.getElementById('myChart2');
+    // console.log(data);
+    
+    if(data != null){
+    
+        var meses = Object.keys(data).map(Number);
+        var count = Object.values(data);
+    }
+    
+    let delayed;
+
+        if(func == true){
+        let chartStatus = Chart.getChart("myChart2"); // <canvas> id
+        if (chartStatus != undefined) {
+            document.querySelector("#chart-line").innerHTML = '<canvas id="myChart2"></canvas>'; //recria o canvas
+        }
+        // console.log(chartStatus);
+    }else{
+        myChart2 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: meses,
+                datasets: [{
+                    label: 'Quantidade de reuniões por mes',
+                    data: count,
+                    borderColor: [
+                        'rgb(0, 0, 0)'
+                    ],
+                    fill: true
+                }]
+            },
+            options: {
+                animation: {
+                    onComplete: () => {
+                        delayed = true;
+                    },
+                    delay: (context) => {
+                        let delay = 0;
+                        if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                        delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                        }
+                        return delay;
+                    },
+                },
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Reuniões Engeline'
+                    }
+                }   
+            }
+        });
+    }
+    // console.log(count);
+    // console.log(meses)
+
+        
+}
+
+async function getPhp(url){
      try { 
         fetch(url, 
         {
@@ -94,9 +158,15 @@ async function getPhp(){
         .then((response) => response.json())
         .then((response) => {
             // console.log(response);
-            const data1 = response.count1;
-            const data2 = response.count2;
-            geraGrafico(data1, data2, false);
+            if(response.count1 && response.count2){
+                const data1 = response.count1;
+                const data2 = response.count2;
+                geraGrafico(data1, data2, false);
+            }else if(response.countArray){
+                const count = response.countArray;
+                geraGrafico2(count, false)
+            }
+            
 
             return response;
         });
@@ -109,27 +179,41 @@ async function getPhp(){
 function quebraGrafico(atuador){
     geraGrafico(null, null, atuador)
 }
+function quebraGrafico2(atuador){
+    geraGrafico2(null,  atuador)
+}
 
-const divElement = document.querySelector('div');
+const divElement = document.getElementById('chart');
+const divElement2 = document.getElementById('chart-line');
 const toggleButton = document.getElementById('grafico_barra');
-
-
+const toggleButton2 = document.getElementById('grafico_linha');
 
 toggleButton.addEventListener('click', function() {
-  if (divElement.style.display === 'none') {
-    if (!isFetching) {
-        isFetching = true;
-        getPhp().then(() => {
+    if (divElement.style.display === 'none') {
+        if (!isFetching) {
+            isFetching = true;
+            getPhp('fetch.php?type=barra').then(() => {
                 isFetching = false;
-                // quebraGrafico();
-            }
-        );
-        
-    divElement.style.display = 'block';
-    
-  }} else {
-    divElement.style.display = 'none';
-    quebraGrafico(true);
-  }
+            });    
+            divElement.style.display = 'block';
+        }   
+    }else{
+        divElement.style.display = 'none';
+        quebraGrafico(true);
+    }
 });
 
+toggleButton2.addEventListener('click', function() {
+    if (divElement2.style.display === 'none') {
+        if (!isFetching) {
+            isFetching = true;
+            getPhp('fetch.php?type=linha').then(() => {
+                isFetching = false;
+            });    
+            divElement2.style.display = 'block';
+        }   
+    }else{
+        divElement2.style.display = 'none';
+        quebraGrafico2(true);
+    }
+});
