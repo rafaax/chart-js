@@ -87,7 +87,7 @@ function geraGrafico(data, data2, func){
                     },
                     title: {
                         display: true,
-                        text: 'Reuniões Engeline'
+                        text: 'Reunioes Engeline'
                     }
                 }   
             }
@@ -124,12 +124,15 @@ function geraGrafico2(data, func){
             data: {
                 labels: meses,
                 datasets: [{
-                    label: 'Quantidade de reuniões por mes',
+                    label: 'Quantidade de reunioes por mes',
                     data: count,
                     borderColor: [
                         'rgb(0, 0, 0)'
                     ],
-                    fill: true
+                    pointStyle: 'star',
+                    pointRadius: 5,
+                    pointBorderColor: 'rgb(0, 0, 0)',
+                    fill: false
                 }]
             },
             options: {
@@ -148,11 +151,14 @@ function geraGrafico2(data, func){
                 responsive: true,
                 plugins: {
                     legend: {
+                        labels: {
+                            usePointStyle: true,
+                        },
                         position: 'top',
                     },
                     title: {
                         display: true,
-                        text: 'Reuniões Engeline'
+                        text: 'Reunioes Engeline'
                     }
                 }   
             }
