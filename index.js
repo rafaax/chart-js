@@ -2,6 +2,21 @@ let presencial;
 let isFetching = false;
 var myChart;
 
+const mesesMap = {
+  1: 'Jan',
+  2: 'Fev',
+  3: 'Mar',
+  4: 'Abr',
+  5: 'Mai',
+  6: 'Jun',
+  7: 'Jul',
+  8: 'Ago',
+  9: 'Set',
+  10: 'Out',
+  11: 'Nov',
+  12: 'Dez'
+};
+
 
 function geraGrafico(data, data2, func){
     const ctx = document.getElementById('myChart');
@@ -88,8 +103,11 @@ function geraGrafico2(data, func){
     
     if(data != null){
     
-        var meses = Object.keys(data).map(Number);
+        var meses = Object.keys(data).map(Number).map((numeroMes) => mesesMap[numeroMes]);;
         var count = Object.values(data);
+
+        
+        console.log(meses);
     }
     
     let delayed;

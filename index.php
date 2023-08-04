@@ -32,10 +32,14 @@
     <button id="grafico_barra" class="button" type="button">Gráfico de Barra</button>
     <button id="grafico_linha" class="button" type="button">Gráfico de Linha</button>
 </div>
-<div id="chart" style="display:none">
-    <canvas id="myChart"></canvas>
+<div class="container">
+    <div id="chart" style="display:none">
+        <canvas id="myChart"></canvas>
+    </div>
 </div>
-<div id="chart-line" style="display:none">
-    <canvas id="myChart2"></canvas>
+<div class="container">
+    <div id="chart-line" style="display:none">
+        <canvas id="myChart2"></canvas>
+    </div>
 </div>
 <script src="index.js"></script>
